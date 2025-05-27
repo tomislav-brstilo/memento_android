@@ -1,4 +1,6 @@
 plugins {
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
     // Apply the Android Application plugin via version catalog alias
     alias(libs.plugins.android.application)
     // Apply Kotlin Android plugin via version catalog alias
@@ -75,10 +77,21 @@ dependencies {
 
     // Mapbox Maps SDK for displaying maps
     implementation(libs.android)
+    implementation(libs.firebase.auth.ktx)
 
     // Unit testing
     testImplementation(libs.junit)
     // Android instrumented testing
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Import the Firebase BoM
+    implementation(platform(libs.firebase.bom))
+
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation(libs.firebase.analytics)
+
+    // Add the dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
 }

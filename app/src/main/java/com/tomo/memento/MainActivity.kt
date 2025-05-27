@@ -1,12 +1,15 @@
 package com.tomo.memento
 
 import android.os.Bundle
+import android.view.View
+import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.style
 import com.tomo.memento.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_explore -> {
-                    // TODO: Implement Explore screen logic
+                    showExploreFilterMenu()
                     true
                 }
                 R.id.nav_messages -> {
@@ -75,4 +78,28 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun showExploreFilterMenu() {
+        val bottomNavView = binding.bottomNavigation
+        val exploreItemView = bottomNavView.findViewById<View>(R.id.nav_explore)
+
+        val popup = PopupMenu(this, exploreItemView)
+        popup.menuInflater.inflate(R.menu.explore_filter_menu, popup.menu)
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.filter_friends -> {
+                    // TODO: Filter posts by friends
+                    true
+                }
+                R.id.filter_everyone -> {
+                    // TODO: Filter posts by everyone in the world
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
+    }
+
 }

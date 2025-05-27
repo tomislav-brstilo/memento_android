@@ -8,4 +8,9 @@
     <string name="add">Add</string>
     <string name="notifications">Notifications</string>
     <string name="profile">Profile</string>
+    <string name="friends">Friends</string>
+    <string name="everyone">Everyone</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
 </resources>
