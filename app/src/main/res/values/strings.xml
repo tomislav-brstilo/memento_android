@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Memento</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="explore">Explore</string>
+    <string name="messages">Messages</string>
+    <string name="add">Add</string>
+    <string name="notifications">Notifications</string>
+    <string name="profile">Profile</string>
+</resources>
