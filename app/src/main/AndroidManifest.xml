@@ -30,6 +30,8 @@
 
         <activity android:name=".MainActivity" />
 
+        <activity android:name=".ProfileActivity" />
+
         <!-- Mapbox access token (visible in APK, use with caution in production) -->
         <meta-data
             android:name="com.mapbox.maps.token"

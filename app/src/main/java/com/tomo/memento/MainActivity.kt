@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> {
-                    // TODO: Implement Profile screen logic
+                    startActivity(Intent(this, ProfileActivity::class.java))
                     true
                 }
                 else -> false
