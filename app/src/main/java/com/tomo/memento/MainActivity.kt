@@ -144,15 +144,20 @@ class MainActivity : AppCompatActivity() {
             when (requestCode) {
                 REQUEST_IMAGE_CAPTURE -> {
                     photoUri?.let {
-                        // TODO: Handle the captured photo URI
+                        val intent = Intent(this, PostActivity::class.java)
+                        intent.putExtra("image_uri", it.toString())
+                        startActivity(intent)
                     }
                 }
                 REQUEST_IMAGE_PICK -> {
                     val selectedImageUri = data?.data
                     selectedImageUri?.let {
-                        // TODO: Handle the selected image URI
+                        val intent = Intent(this, PostActivity::class.java)
+                        intent.putExtra("image_uri", it.toString())
+                        startActivity(intent)
                     }
                 }
+
             }
         }
     }

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:mapbox="http://schemas.android.com/apk/res-auto">
     <string name="mapbox_access_token" translatable="false" tools:ignore="UnusedResources">pk.eyJ1IjoidG9tbzE1MyIsImEiOiJjbWI2ZmxsYTkwMGNhMmtzZDhnbmF3cnRlIn0.IWyqpTzgLl-zj89kcEAYoQ</string>
 </resources>

@@ -39,10 +39,12 @@
 
         <activity android:name=".ProfileActivity" />
 
+        <activity android:name=".PostActivity" />
+
         <!-- Mapbox access token (visible in APK, use with caution in production) -->
         <meta-data
-            android:name="com.mapbox.maps.token"
-            android:value="pk.eyJ1IjoidG9tbzE1MyIsImEiOiJjbWI2ZmxsYTkwMGNhMmtzZDhnbmF3cnRlIn0.IWyqpTzgLl-zj89kcEAYoQ" />
+            android:name="com.mapbox.access_token"
+            android:value="@string/mapbox_access_token" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
