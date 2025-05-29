@@ -10,6 +10,7 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.gestures.gestures
 import com.tomo.memento.databinding.ActivityPostBinding
+import java.io.File
 
 class PostActivity : AppCompatActivity() {
 
@@ -39,12 +40,25 @@ class PostActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            Toast.makeText(this, "Post submitted!", Toast.LENGTH_SHORT).show()
+            if (imageUri == null) {
+                Toast.makeText(this, "Image missing.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            // Go back to MainActivity
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            // Convert URI to File
+            val file = File(imageUri!!.path ?: return@setOnClickListener)
+
+            val uniqueKey = "posts/${System.currentTimeMillis()}.jpg"
+
+            DigitalOceanHelper.uploadFile(this, file, uniqueKey, onComplete = {
+                Toast.makeText(this, "Upload successful!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }, onError = {
+                Toast.makeText(this, "Upload failed: ${it.message}", Toast.LENGTH_LONG).show()
+            })
         }
+
     }
 
     private fun setupMap() {
