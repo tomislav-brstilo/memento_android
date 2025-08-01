@@ -95,7 +95,9 @@ dependencies {
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
 
-    implementation(libs.aws.android.sdk.core)
-    implementation("com.amazonaws:aws-android-sdk-s3:2.22.8")
+    implementation(libs.aws.android.sdk.s3)
+
+    implementation (libs.retrofit2.retrofit)
+    implementation (libs.converter.gson)
 
 }

@@ -50,13 +50,13 @@ class PostActivity : AppCompatActivity() {
 
             val uniqueKey = "posts/${System.currentTimeMillis()}.jpg"
 
-            DigitalOceanHelper.uploadFile(this, file, uniqueKey, onComplete = {
-                Toast.makeText(this, "Upload successful!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }, onError = {
-                Toast.makeText(this, "Upload failed: ${it.message}", Toast.LENGTH_LONG).show()
-            })
+//            DigitalOceanHelper.uploadFile(this, file, uniqueKey, onComplete = {
+//                Toast.makeText(this, "Upload successful!", Toast.LENGTH_SHORT).show()
+//                startActivity(Intent(this, MainActivity::class.java))
+//                finish()
+//            }, onError = {
+//                Toast.makeText(this, "Upload failed: ${it.message}", Toast.LENGTH_LONG).show()
+//            })
         }
 
     }

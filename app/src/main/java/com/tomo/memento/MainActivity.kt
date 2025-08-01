@@ -22,6 +22,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import java.io.File
 
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import com.tomo.memento.ApiService
+import com.tomo.memento.MessageResponse
+
+
 class MainActivity : AppCompatActivity() {
 
     // ViewBinding to access views in activity_main.xml
@@ -53,6 +62,33 @@ class MainActivity : AppCompatActivity() {
 
         // Handle bottom navigation item selection
         setupBottomNavigation()
+
+        // Setup Retrofit
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://www.mementoapp.eu/")  // HTTPS now!
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+
+        val apiService = retrofit.create(ApiService::class.java)
+
+        // Make API call
+        apiService.getHello().enqueue(object : Callback<MessageResponse> {
+            override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val message = response.body()!!.message
+                    Toast.makeText(this@MainActivity, "Message from server: $message", Toast.LENGTH_LONG).show()
+                    // Or update your UI here instead of Toast
+                } else {
+                    Toast.makeText(this@MainActivity, "Response failed: ${response.code()}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "API call failed: ${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+
     }
 
     private fun setupMapView() {
