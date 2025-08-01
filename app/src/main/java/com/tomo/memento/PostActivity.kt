@@ -1,8 +1,9 @@
 package com.tomo.memento
 
-import android.content.Intent
+import ApiService
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.mapbox.geojson.Point
@@ -10,6 +11,14 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.gestures.gestures
 import com.tomo.memento.databinding.ActivityPostBinding
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
 class PostActivity : AppCompatActivity() {
@@ -45,18 +54,53 @@ class PostActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Convert URI to File
-            val file = File(imageUri!!.path ?: return@setOnClickListener)
-
             val uniqueKey = "posts/${System.currentTimeMillis()}.jpg"
 
-//            DigitalOceanHelper.uploadFile(this, file, uniqueKey, onComplete = {
-//                Toast.makeText(this, "Upload successful!", Toast.LENGTH_SHORT).show()
-//                startActivity(Intent(this, MainActivity::class.java))
-//                finish()
-//            }, onError = {
-//                Toast.makeText(this, "Upload failed: ${it.message}", Toast.LENGTH_LONG).show()
-//            })
+            // Prepare Retrofit
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://www.mementoapp.eu/") // Or your server's base URL
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val apiService = retrofit.create(ApiService::class.java)
+
+            val inputStream = contentResolver.openInputStream(imageUri!!)
+            val tempFile = File.createTempFile("upload_", ".jpg", cacheDir)
+            inputStream?.use { input ->
+                tempFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+
+            val requestFile = RequestBody.create(
+                contentResolver.getType(imageUri!!)?.toMediaTypeOrNull(),
+                tempFile
+            )
+
+            val body = MultipartBody.Part.createFormData("image", "photo.jpg", requestFile)
+
+            val captionBody = RequestBody.create("text/plain".toMediaTypeOrNull(), caption)
+            val latBody = RequestBody.create("text/plain".toMediaTypeOrNull(), selectedLocation!!.latitude().toString())
+            val lonBody = RequestBody.create("text/plain".toMediaTypeOrNull(), selectedLocation!!.longitude().toString())
+
+            apiService.uploadPost(body, captionBody, latBody, lonBody)
+                .enqueue(object : Callback<UploadResponse> {
+                    override fun onResponse(call: Call<UploadResponse>, response: Response<UploadResponse>) {
+                        if (response.isSuccessful && response.body()?.ok == true) {
+                            Toast.makeText(this@PostActivity, "Upload successful!", Toast.LENGTH_SHORT).show()
+                            finish() // Or navigate elsewhere
+                        } else {
+                            Toast.makeText(this@PostActivity, "Upload failed: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
+                        Toast.makeText(this@PostActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                        Log.e("Error", t.message ?: "Unknown error")
+                    }
+                })
+
+
         }
 
     }

@@ -1,5 +1,6 @@
 package com.tomo.memento
 
+import ApiService
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
@@ -27,9 +28,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.tomo.memento.ApiService
-import com.tomo.memento.MessageResponse
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -71,23 +69,6 @@ class MainActivity : AppCompatActivity() {
 
 
         val apiService = retrofit.create(ApiService::class.java)
-
-        // Make API call
-        apiService.getHello().enqueue(object : Callback<MessageResponse> {
-            override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val message = response.body()!!.message
-                    Toast.makeText(this@MainActivity, "Message from server: $message", Toast.LENGTH_LONG).show()
-                    // Or update your UI here instead of Toast
-                } else {
-                    Toast.makeText(this@MainActivity, "Response failed: ${response.code()}", Toast.LENGTH_LONG).show()
-                }
-            }
-
-            override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "API call failed: ${t.message}", Toast.LENGTH_LONG).show()
-            }
-        })
 
     }
 
