@@ -41,6 +41,8 @@
 
         <activity android:name=".PostActivity" />
 
+        <activity android:name=".PostDetailActivity" />
+
         <!-- Mapbox access token (visible in APK, use with caution in production) -->
         <meta-data
             android:name="com.mapbox.access_token"

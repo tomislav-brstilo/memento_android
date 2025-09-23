@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.Style
@@ -79,11 +80,16 @@ class PostActivity : AppCompatActivity() {
 
             val body = MultipartBody.Part.createFormData("image", "photo.jpg", requestFile)
 
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val userUid = currentUser?.uid ?: "anonymous"
+
+            // existing bodies
             val captionBody = RequestBody.create("text/plain".toMediaTypeOrNull(), caption)
             val latBody = RequestBody.create("text/plain".toMediaTypeOrNull(), selectedLocation!!.latitude().toString())
             val lonBody = RequestBody.create("text/plain".toMediaTypeOrNull(), selectedLocation!!.longitude().toString())
+            val userBody = RequestBody.create("text/plain".toMediaTypeOrNull(), userUid)
 
-            apiService.uploadPost(body, captionBody, latBody, lonBody)
+            apiService.uploadPost(body, captionBody, latBody, lonBody, userBody)
                 .enqueue(object : Callback<UploadResponse> {
                     override fun onResponse(call: Call<UploadResponse>, response: Response<UploadResponse>) {
                         if (response.isSuccessful && response.body()?.ok == true) {

@@ -15,7 +15,8 @@ interface ApiService {
         @Part image: MultipartBody.Part,
         @Part("caption") caption: RequestBody,
         @Part("latitude") latitude: RequestBody,
-        @Part("longitude") longitude: RequestBody
+        @Part("longitude") longitude: RequestBody,
+        @Part("user_uid") user_uid: RequestBody
     ): Call<UploadResponse>
     @GET("posts")
     fun getPosts(): Call<List<Post>>

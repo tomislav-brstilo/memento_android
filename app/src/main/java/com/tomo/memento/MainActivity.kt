@@ -292,27 +292,48 @@ class MainActivity : AppCompatActivity() {
         binding.mapView.getMapboxMap().getStyle { style ->
             posts.forEach { post ->
                 CoroutineScope(Dispatchers.IO).launch {
-                    val bitmap = downloadBitmap(post.imageUrl)
+                    val bitmap = downloadBitmap(post.imageurl)
                     if (bitmap != null) {
                         withContext(Dispatchers.Main) {
-                            val circularBitmap = createCircularBitmapWithBorder(bitmap, borderSize = 6f)
                             val imageId = "post-image-${post.id}"
                             if (style.getStyleImage(imageId) == null) {
-                                style.addImage(imageId, circularBitmap)
+                                style.addImage(imageId, createCircularBitmapWithBorder(bitmap))
                             }
 
                             val pointAnnotationOptions = PointAnnotationOptions()
                                 .withPoint(Point.fromLngLat(post.longitude, post.latitude))
                                 .withIconImage(imageId)
-                                .withIconSize(0.1)
+                                .withIconSize(0.12)
+                                .withData(post.toJsonElement())
 
                             pointAnnotationManager.create(pointAnnotationOptions)
                         }
                     }
                 }
             }
+
+            // ✅ Add click listener once
+            pointAnnotationManager.addClickListener { annotation ->
+                val data = annotation.getData() // JsonElement?
+                if (data != null) {
+                    val post = Post.fromJson(data)
+                    openPostDetail(post)
+                }
+                true
+            }
         }
+
     }
+
+    private fun openPostDetail(post: Post) {
+        val intent = Intent(this, PostDetailActivity::class.java)
+        intent.putExtra("imageurl", post.imageurl)
+        intent.putExtra("caption", post.caption)
+        intent.putExtra("user_uid", post.user_uid)
+        intent.putExtra("timestamp", post.timestamp)
+        startActivity(intent)
+    }
+
 
     private fun createCircularBitmapWithBorder(bitmap: Bitmap, borderSize: Float = 8f): Bitmap {
         val size = minOf(bitmap.width, bitmap.height)
