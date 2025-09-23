@@ -18,6 +18,7 @@ navigationFragmentKtx = "2.6.0"
 navigationUiKtx = "2.6.0"
 firebaseAuthKtx = "23.2.1"
 retrofitVersion = "2.9.0"
+uiGraphicsAndroid = "1.9.1"
 
 [libraries]
 android = { module = "com.mapbox.maps:android", version.ref = "android" }
@@ -38,6 +39,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 material-v1110 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 retrofit2-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

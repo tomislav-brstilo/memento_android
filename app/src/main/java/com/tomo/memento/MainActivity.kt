@@ -42,8 +42,8 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.AnnotationPlugin
 import com.mapbox.maps.plugin.annotation.annotations
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.*
+import androidx.compose.ui.graphics.Canvas
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -295,15 +295,16 @@ class MainActivity : AppCompatActivity() {
                     val bitmap = downloadBitmap(post.imageUrl)
                     if (bitmap != null) {
                         withContext(Dispatchers.Main) {
+                            val circularBitmap = createCircularBitmapWithBorder(bitmap, borderSize = 6f)
                             val imageId = "post-image-${post.id}"
                             if (style.getStyleImage(imageId) == null) {
-                                style.addImage(imageId, bitmap)
+                                style.addImage(imageId, circularBitmap)
                             }
 
                             val pointAnnotationOptions = PointAnnotationOptions()
                                 .withPoint(Point.fromLngLat(post.longitude, post.latitude))
                                 .withIconImage(imageId)
-                                .withIconSize(0.1)  // scale down the marker size (default is 1.0)
+                                .withIconSize(0.1)
 
                             pointAnnotationManager.create(pointAnnotationOptions)
                         }
@@ -312,6 +313,37 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun createCircularBitmapWithBorder(bitmap: Bitmap, borderSize: Float = 8f): Bitmap {
+        val size = minOf(bitmap.width, bitmap.height)
+        val halfStroke = borderSize * 10 / 2f      // <-- half of your thick border
+        val outputSize = (size + halfStroke * 2).toInt()
+        val output = Bitmap.createBitmap(outputSize, outputSize, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        val radius = size / 2f
+
+        // Center the circle in the bigger canvas
+        val cx = outputSize / 2f
+        val cy = outputSize / 2f
+
+        // Draw circular cropped image
+        val shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        paint.shader = shader
+        canvas.drawCircle(cx, cy, radius, paint)
+
+        // Draw border (will not be clipped now)
+        paint.shader = null
+        paint.color = Color.WHITE
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = borderSize * 10
+        canvas.drawCircle(cx, cy, radius, paint)
+
+        return output
+    }
+
+
 
 
     private fun downloadBitmap(url: String): Bitmap? {

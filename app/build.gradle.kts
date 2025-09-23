@@ -78,6 +78,7 @@ dependencies {
     // Mapbox Maps SDK for displaying maps
     implementation(libs.android)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.androidx.ui.graphics.android)
 
     // Unit testing
     testImplementation(libs.junit)
