@@ -43,6 +43,7 @@ import com.mapbox.maps.plugin.annotation.AnnotationPlugin
 import com.mapbox.maps.plugin.annotation.annotations
 
 import android.graphics.*
+import android.util.Log
 import androidx.compose.ui.graphics.Canvas
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
@@ -326,11 +327,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openPostDetail(post: Post) {
-        val intent = Intent(this, PostDetailActivity::class.java)
-        intent.putExtra("imageurl", post.imageurl)
-        intent.putExtra("caption", post.caption)
-        intent.putExtra("user_uid", post.user_uid)
-        intent.putExtra("timestamp", post.timestamp)
+        val intent = Intent(this, PostDetailActivity::class.java).apply {
+            putExtra("imageurl", post.imageurl)
+            putExtra("caption", post.caption)
+            putExtra("username", post.username)
+            putExtra("profile_photo", post.profile_photo)
+            putExtra("timestamp", post.timestamp)
+        }
         startActivity(intent)
     }
 

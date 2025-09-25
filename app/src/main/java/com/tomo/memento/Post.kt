@@ -9,7 +9,8 @@ data class Post(
     val latitude: Double,
     val longitude: Double,
     val timestamp: String,
-    val user_uid: String
+    val username: String,
+    val profile_photo: String,
 ) {
     // ✅ Member function
     fun toJsonElement(): JsonElement {
@@ -17,7 +18,8 @@ data class Post(
             addProperty("id", id)
             addProperty("imageurl", imageurl)
             addProperty("caption", caption ?: "")
-            addProperty("user_uid", user_uid)
+            addProperty("username", username)
+            addProperty("profile_photo", profile_photo)
             addProperty("latitude", latitude)
             addProperty("longitude", longitude)
             addProperty("timestamp", timestamp)
@@ -27,6 +29,7 @@ data class Post(
 
     companion object {
         fun fromJson(element: JsonElement): Post {
+            android.util.Log.d("POST_JSON", element.toString()) // ✅ Log the incoming JSON here
             val obj = element.asJsonObject
             return Post(
                 id = obj.get("id").asInt,
@@ -35,7 +38,8 @@ data class Post(
                 latitude = obj.get("latitude").asDouble,
                 longitude = obj.get("longitude").asDouble,
                 timestamp = obj.get("timestamp").asString,
-                user_uid = obj.get("user_uid").asString
+                username = obj.get("username").asString,
+                profile_photo = obj.get("profile_photo").asString
             )
         }
     }

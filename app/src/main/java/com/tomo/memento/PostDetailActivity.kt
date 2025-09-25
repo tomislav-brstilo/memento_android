@@ -1,6 +1,7 @@
 package com.tomo.memento
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.tomo.memento.databinding.ActivityPostDetailBinding
@@ -14,18 +15,25 @@ class PostDetailActivity : AppCompatActivity() {
         binding = ActivityPostDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val imageUrl = intent.getStringExtra("imageurl")
-        val caption = intent.getStringExtra("caption")
-        val user = intent.getStringExtra("user")
-        val timestamp = intent.getStringExtra("timestamp")
+        val imageUrl   = intent.getStringExtra("imageurl")
+        val caption    = intent.getStringExtra("caption")
+        val username   = intent.getStringExtra("username")
+        val profileUrl = intent.getStringExtra("profile_photo")
+        val timestamp  = intent.getStringExtra("timestamp")
 
-        // Load photo (Glide recommended)
+        // Post image
         Glide.with(this)
             .load(imageUrl)
             .into(binding.postImageView)
 
-        // Set caption
-        binding.postCaptionTextView.text = "$caption"
+        // Username & caption
+        binding.usernameTextView.text = username
+        binding.postCaptionTextView.text = caption
+
+        // Optional: profile picture
+        Glide.with(this)
+            .load(profileUrl)
+            .into(binding.profileImageView)
 
         // Example click listeners
         binding.likeButton.setOnClickListener {
